@@ -20,16 +20,16 @@ class NotesCubit extends Cubit<NotesState> {
       emit(NotesFailure(e.toString()));
     }
   }
+
   Future<void> addNewNote(NoteModel note) async {
+    if (state is NotesLoading) return;
     emit(NotesLoading());
     try {
-     
       final noteId = await MongoHelper.addNote(note);
       note.id = noteId;
 
-      notes.insert(0, note);  
-
-      emit(NotesSuccess(notes));  
+      notes.insert(0, note);
+      emit(NotesSuccess(notes));
     } catch (e) {
       emit(NotesFailure('Failed to add note: ${e.toString()}'));
     }
@@ -65,14 +65,13 @@ class NotesCubit extends Cubit<NotesState> {
       if (success) {
         notes.removeWhere((note) => note.id == id);
         await fetchAllNotes();
-        
       } else {
         emit(NotesDeleteFailure('Note not found'));
-         await fetchAllNotes(); 
+        await fetchAllNotes();
       }
     } catch (e) {
       emit(NotesDeleteFailure('Delete error: ${e.toString()}'));
-       await fetchAllNotes(); 
+      await fetchAllNotes();
     }
   }
 }

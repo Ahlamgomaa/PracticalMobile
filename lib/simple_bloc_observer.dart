@@ -23,6 +23,7 @@ class SimpleBlocObserver implements BlocObserver {
   }
 
   @override
+
   void onEvent(Bloc bloc, Object? event) {
     
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -16,11 +18,7 @@ class AddNotesCubit extends Cubit<AddNotesState> {
     try {
       await MongoHelper.init();
 
-      final noteId = await MongoHelper.addNote(note);
-      note.id = noteId;
-      notesCubit.addNewNote(note);  
-
-      emit(AddNotesSuccess(noteId: noteId));
+      await notesCubit.addNewNote(note);
     } catch (e) {
       emit(AddNotesFailure('Failed to add note: ${e.toString()}'));
     }

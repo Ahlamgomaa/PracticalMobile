@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/core/utils/mongo_helper.dart';
 import 'package:notes_app/features/notes/data/models/note_model.dart';
-import 'package:notes_app/features/notes/presentation/views/custom_widgets/custom_text_field.dart';
+import 'package:notes_app/features/notes/presentation/views/widgets/custom_note_item.dart';
+import 'package:notes_app/features/notes/presentation/views/widgets/custom_text_field.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -25,10 +26,13 @@ class _SearchViewState extends State<SearchView> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Search', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: const Text(
+            'Search',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           elevation: 3,
         ),
-       
+
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 100),
           child: Column(
@@ -38,13 +42,12 @@ class _SearchViewState extends State<SearchView> {
                 hint: 'Search notes',
                 label: 'Search',
                 searchIcon: true,
-                debounceDuration: const Duration(milliseconds: 200),
-                onChanged: _performSearch, maxLines: 4,
+                debounceDuration: const Duration(milliseconds: 500),
+                onChanged: _performSearch,
+                maxLines: 4,
               ),
-             
-              Expanded(
-                child: _buildSearchResults(),
-              ),
+
+              Expanded(child: _buildSearchResults()),
             ],
           ),
         ),
@@ -64,10 +67,11 @@ class _SearchViewState extends State<SearchView> {
         _searchResults = results.map((e) => NoteModel.fromJson(e)).toList();
       });
     } catch (e) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Search error: ${e.toString()}')),
-      );
+    
+      ScaffoldMessenger.of(
+        // ignore: use_build_context_synchronously
+        context,
+      ).showSnackBar(SnackBar(content: Text('Search error: ${e.toString()}')));
     }
   }
 
@@ -75,19 +79,22 @@ class _SearchViewState extends State<SearchView> {
     if (_searchController.text.isEmpty) {
       return const Center(child: Text('Start typing to search notes'));
     }
-    
+
     if (_searchResults.isEmpty) {
       return const Center(child: Text('No results found'));
     }
 
-    return ListView.builder(
+    return ListView.separated(
       itemCount: _searchResults.length,
       itemBuilder: (context, index) {
         final note = _searchResults[index];
-        return ListTile(
-          title: Text(note.title?? 'No Title'),
-          subtitle: Text(note.subtitle?? 'No Subtitle'),
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10, top: 10),
+          child: NoteItem(note: note),
         );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox(height: 10);
       },
     );
   }

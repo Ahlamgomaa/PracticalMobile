@@ -16,6 +16,7 @@ void main() async {
     runApp(ErrorView(error: e.toString()));
   }
 }
+
 Future<void> startApp() async {
   await MongoHelper.init();
   runApp(
@@ -25,12 +26,11 @@ Future<void> startApp() async {
           create: (context) => NotesCubit()..fetchAllNotes(),
           lazy: false,
         ),
-        BlocProvider(create: (context) => AddNotesCubit(
-          context.read<NotesCubit>(),
-        )),
+        BlocProvider(
+          create: (context) => AddNotesCubit(context.read<NotesCubit>()),
+        ),
       ],
       child: const NotesApp(),
     ),
   );
 }
-
