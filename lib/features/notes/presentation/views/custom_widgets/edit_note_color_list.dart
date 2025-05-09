@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/core/utils/constants.dart';
-import 'package:notes_app/features/notes/presentation/views/widgets/colors_list_view.dart';
+import 'package:notes_app/features/notes/presentation/views/custom_widgets/colors_list_view.dart';
 
 class ColorListView extends StatefulWidget {
   final ValueChanged<Color> onColorSelected;

@@ -13,12 +13,11 @@ void main() async {
   try {
     await startApp();
   } catch (e) {
-    runApp(ErrorScreen(error: e.toString()));
+    runApp(ErrorView(error: e.toString()));
   }
 }
 Future<void> startApp() async {
   await MongoHelper.init();
-
   runApp(
     MultiBlocProvider(
       providers: [

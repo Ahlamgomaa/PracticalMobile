@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/core/utils/mongo_helper.dart';
 import 'package:notes_app/features/notes/data/models/note_model.dart';
-import 'package:notes_app/features/notes/presentation/views/widgets/custom_text_field.dart';
+import 'package:notes_app/features/notes/presentation/views/custom_widgets/custom_text_field.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});

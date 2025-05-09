@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app/features/notes/presentation/view_model/add_notes/add_notes_cubit.dart';
 import 'package:notes_app/features/notes/presentation/view_model/add_notes/add_notes_state.dart';
-import 'package:notes_app/features/notes/presentation/views/widgets/custom_button.dart';
-import 'package:notes_app/features/notes/presentation/views/widgets/custom_text_field.dart';
-import 'package:notes_app/features/notes/presentation/views/widgets/edit_note_color_list.dart';
+import 'package:notes_app/features/notes/presentation/views/custom_widgets/custom_button.dart';
+import 'package:notes_app/features/notes/presentation/views/custom_widgets/custom_text_field.dart';
+import 'package:notes_app/features/notes/presentation/views/custom_widgets/edit_note_color_list.dart';
 
 class AddNoteForm extends StatefulWidget {
   const AddNoteForm({super.key});

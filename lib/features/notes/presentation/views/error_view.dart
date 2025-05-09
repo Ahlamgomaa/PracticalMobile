@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/main.dart';
 
-class ErrorScreen extends StatelessWidget {
+class ErrorView extends StatelessWidget {
   final String error;
 
-  const ErrorScreen({super.key, required this.error});
-
+  const ErrorView({super.key, required this.error});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,6 +39,7 @@ class ErrorScreen extends StatelessWidget {
                     try {
                       await startApp();
                     } catch (e) {
+                      
                       // Optionally show a snackbar or stay on error screen
                     }
                   },

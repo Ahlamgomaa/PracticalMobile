@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app/features/notes/presentation/view_model/notes/notes_cubit.dart';
-import 'package:notes_app/features/notes/presentation/views/widgets/custom_add_note_sheet.dart';
-import 'package:notes_app/features/notes/presentation/views/widgets/custom_app_bar.dart';
-import 'package:notes_app/features/notes/presentation/views/widgets/custom_note_item.dart';
+import 'package:notes_app/features/notes/presentation/views/custom_widgets/custom_add_note_sheet.dart';
+import 'package:notes_app/features/notes/presentation/views/custom_widgets/custom_app_bar.dart';
+import 'package:notes_app/features/notes/presentation/views/custom_widgets/custom_note_item.dart';
 
 class NotesView extends StatelessWidget {
   const NotesView({super.key});

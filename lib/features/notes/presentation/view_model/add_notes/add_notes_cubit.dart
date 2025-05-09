@@ -18,8 +18,6 @@ class AddNotesCubit extends Cubit<AddNotesState> {
 
       final noteId = await MongoHelper.addNote(note);
       note.id = noteId;
-
-  
       notesCubit.addNewNote(note);  
 
       emit(AddNotesSuccess(noteId: noteId));
