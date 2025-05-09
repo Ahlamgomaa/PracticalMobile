@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:mongo_dart/mongo_dart.dart';
-import 'package:notes_app/features/notes/data/models/data_model.dart';
+import 'package:notes_app/features/notes/data/models/note_model.dart';
 
 
 class MongoHelper {
@@ -49,13 +49,15 @@ static Future<String> addNote(NoteModel note) async {
 
 
 
-static Future<bool> updateNote(int id, NoteModel note) async {
+static Future<bool> updateNote(dynamic id, NoteModel note) async {
   try {
     final existing = await notesCollection.findOne(where.eq('_id', id));
     if (existing == null) {
-      return false;
+      print('Note with ID $id not found.');
+      return false; 
     }
-  await notesCollection.update(
+
+    await notesCollection.update(
       where.eq('_id', id),
       modify
         .set('title', note.title)
@@ -65,14 +67,16 @@ static Future<bool> updateNote(int id, NoteModel note) async {
         .set('updatedAt', DateTime.now()),
     );
 
-    return true;
-    
+ return true;
   } catch (e) {
-
-    return false;
+    print('Error updating note: $e');
+    return false; // إذا حدث خطأ
   }
-}  
-static Future<bool> deleteNote(String id) async {
+}
+
+
+ 
+static Future<bool> deleteNote(dynamic id) async {
   try {
     if (id.isEmpty) throw Exception('Invalid ID: Empty ID');
 
@@ -83,7 +87,7 @@ static Future<bool> deleteNote(String id) async {
 
     dynamic query;
     try {
-      query = where.eq('_id', ObjectId.parse(id));
+      query = where.eq('_id',id );
     } catch (e) {
       query = where.eq('_id', id);
     }

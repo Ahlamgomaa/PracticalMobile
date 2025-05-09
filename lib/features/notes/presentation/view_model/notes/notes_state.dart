@@ -19,12 +19,18 @@ class NotesFailure extends NotesState {
 }
 // update notes in the database
 class NotesUpdateSuccess extends NotesState {
+  final List<NoteModel> notes;
+  NotesUpdateSuccess(this.notes);
 
 }
 
 class NotesUpdateFailure extends NotesState {
   final String error;
   NotesUpdateFailure(this.error);
+}
+class NotesDeletedSucess extends NotesState {
+  final List<NoteModel> notes;
+  NotesDeletedSucess(this.notes);
 }
 // delete notes in the database
 class NotesDeleteFailure extends NotesState {

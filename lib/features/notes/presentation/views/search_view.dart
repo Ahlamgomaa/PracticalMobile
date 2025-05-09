@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/core/utils/mongo_helper.dart';
-import 'package:notes_app/features/notes/data/models/data_model.dart';
+import 'package:notes_app/features/notes/data/models/note_model.dart';
 import 'package:notes_app/features/notes/presentation/views/widgets/custom_text_field.dart';
 
 class SearchView extends StatefulWidget {
@@ -85,8 +85,8 @@ class _SearchViewState extends State<SearchView> {
       itemBuilder: (context, index) {
         final note = _searchResults[index];
         return ListTile(
-          title: Text(note.title),
-          subtitle: Text(note.subtitle),
+          title: Text(note.title?? 'No Title'),
+          subtitle: Text(note.subtitle?? 'No Subtitle'),
         );
       },
     );

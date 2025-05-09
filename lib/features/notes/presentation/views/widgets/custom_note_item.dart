@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes_app/features/notes/data/models/data_model.dart';
+import 'package:notes_app/features/notes/data/models/note_model.dart';
 import 'package:notes_app/features/notes/presentation/view_model/notes/notes_cubit.dart';
 import 'package:notes_app/features/notes/presentation/views/edit_note_view.dart';
 
@@ -25,8 +25,9 @@ class NoteItem extends StatelessWidget {
                 onPressed: () async {
                   Navigator.pop(context);
                   await context.read<NotesCubit>().deleteNote(
-                    note.id.toString(),
+                    note.id,
                   );
+                  
                 },
                 child: const Text(
                   'Delete',
@@ -49,7 +50,7 @@ class NoteItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.only(top: 24, bottom: 24, left: 16),
         decoration: BoxDecoration(
-          color: Color(note.color),
+          color: Color(note.color as int),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -57,7 +58,7 @@ class NoteItem extends StatelessWidget {
           children: [
             ListTile(
               title: Text(
-                note.title,
+                note.title?? 'NO Tittle',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -67,7 +68,7 @@ class NoteItem extends StatelessWidget {
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 25, bottom: 10),
                 child: Text(
-                  note.subtitle,
+                  note.subtitle?? 'NO Content',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     // ignore: deprecated_member_use
@@ -84,7 +85,7 @@ class NoteItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 24),
               child: Text(
-                note.date,
+                note.date?? 'NO Date',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   // ignore: deprecated_member_use

@@ -11,17 +11,19 @@ class NotesListView extends StatelessWidget {
     return BlocListener<NotesCubit, NotesState>(
       listener: (context, state) {
         if (state is NotesDeleteFailure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.error)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.error)),
+          );
         }
       },
-
       child: BlocBuilder<NotesCubit, NotesState>(
         builder: (context, state) {
           if (state is NotesLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is NotesSuccess) {
+            if (state.notes.isEmpty) {
+              return const Center(child: Text('No notes available.'));
+            }
             return ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               itemCount: state.notes.length,
@@ -30,8 +32,6 @@ class NotesListView extends StatelessWidget {
                 return NoteItem(note: state.notes[index]);
               },
             );
-          } else if (state is NotesDeleteFailure) {
-            return Center(child: Text(state.error));
           } else {
             return const Center(child: Text('No notes available.'));
           }

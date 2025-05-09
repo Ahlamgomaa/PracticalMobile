@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app/core/utils/mongo_helper.dart';
-import 'package:notes_app/features/notes/data/models/data_model.dart';
+import 'package:notes_app/features/notes/data/models/note_model.dart';
 
 part 'notes_state.dart';
 
@@ -21,7 +21,7 @@ class NotesCubit extends Cubit<NotesState> {
     }
   }
 
-  Future<void> updateNote(int id, NoteModel updatedNote) async {
+  Future<void> updateNote(dynamic id , NoteModel updatedNote) async {
     emit(NotesLoading());
     try {
       final success = await MongoHelper.updateNote(id, updatedNote);
@@ -32,8 +32,10 @@ class NotesCubit extends Cubit<NotesState> {
         if (index != -1) {
           notes[index] = updatedNote;
         }
-
-        emit(NotesSuccess(notes));
+          await fetchAllNotes();
+        
+        emit(NotesUpdateSuccess(notes));
+      
       } else {
         emit(NotesUpdateFailure('No changes were made'));
       }
@@ -42,19 +44,22 @@ class NotesCubit extends Cubit<NotesState> {
     }
   }
 
-  Future<void> deleteNote(String id) async {
-    emit(NotesLoading());
-    try {
-      final success = await MongoHelper.deleteNote(id);
+ Future<void> deleteNote(dynamic id) async {
+  emit(NotesLoading());
+  try {
+    final success = await MongoHelper.deleteNote(id);
 
-      if (success) {
-        notes.removeWhere((note) => note.id.toString() == id);
-        emit(NotesSuccess(List.from(notes))); 
-      } else {
-        emit(NotesDeleteFailure('Note not found'));
-      }
-    } catch (e) {
-      emit(NotesDeleteFailure('Delete error: ${e.toString()}'));
+    if (success) {
+      notes.removeWhere((note) => note.id == id);
+      // إعادة تحميل البيانات بعد الحذف
+      await fetchAllNotes();  
+      emit(NotesDeletedSucess(List.from(notes)));
+    } else {
+      emit(NotesDeleteFailure('Note not found'));
     }
+  } catch (e) {
+    emit(NotesDeleteFailure('Delete error: ${e.toString()}'));
   }
+}
+
 }

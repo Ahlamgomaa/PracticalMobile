@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:notes_app/core/utils/mongo_helper.dart';
-import 'package:notes_app/features/notes/data/models/data_model.dart';
+import 'package:notes_app/features/notes/data/models/note_model.dart';
 import 'package:notes_app/features/notes/presentation/view_model/add_notes/add_notes_state.dart';
 
 class AddNotesCubit extends Cubit<AddNotesState> {
@@ -12,6 +12,7 @@ Future<void> addNote(NoteModel note) async {
   emit(AddNotesLoading());
   try {
     await MongoHelper.init();
+
     final noteId = await MongoHelper.addNote(note);
     emit(AddNotesSuccess(noteId: noteId));
   } catch (e) {
@@ -31,7 +32,7 @@ Future<void> addNote(NoteModel note) async {
         subtitle: subtitle,
         // ignore: deprecated_member_use
         color: color.value,
-        date: DateFormat.yMd().format(DateTime.now()),
+        date: DateFormat.yMd().format(DateTime.now()), 
 
       );
       await addNote(note);

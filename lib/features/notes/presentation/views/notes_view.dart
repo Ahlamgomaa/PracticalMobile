@@ -13,30 +13,30 @@ class NotesView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(title: 'Notes', icon: Icons.search),
-       floatingActionButton: FloatingActionButton(
-  backgroundColor: Theme.of(context).primaryColor,
-  foregroundColor: Colors.white,
-  onPressed: () {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => const AddNoteSheet(),
-    );
-  },
-  child: const Icon(Icons.add),
-),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColorLight,
+          foregroundColor: Colors.white,
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => const AddNoteSheet(),
+            );
+          },
+          child: const Icon(Icons.add),
+        ),
         body: BlocBuilder<NotesCubit, NotesState>(
           builder: (context, state) {
             final cubit = context.read<NotesCubit>();
-            
+
             if (state is NotesLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-            
+
             if (state is NotesFailure) {
               return Center(child: Text(state.error));
             }
-            
+
             if (state is NotesSuccess || state is NotesInitial) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -52,7 +52,7 @@ class NotesView extends StatelessWidget {
                 ),
               );
             }
-            
+
             return Container();
           },
         ),
