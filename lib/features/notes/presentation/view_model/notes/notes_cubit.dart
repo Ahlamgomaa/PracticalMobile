@@ -20,8 +20,22 @@ class NotesCubit extends Cubit<NotesState> {
       emit(NotesFailure(e.toString()));
     }
   }
+  Future<void> addNewNote(NoteModel note) async {
+    emit(NotesLoading());
+    try {
+     
+      final noteId = await MongoHelper.addNote(note);
+      note.id = noteId;
 
-  Future<void> updateNote(dynamic id , NoteModel updatedNote) async {
+      notes.insert(0, note);  
+
+      emit(NotesSuccess(notes));  
+    } catch (e) {
+      emit(NotesFailure('Failed to add note: ${e.toString()}'));
+    }
+  }
+
+  Future<void> updateNote(dynamic id, NoteModel updatedNote) async {
     emit(NotesLoading());
     try {
       final success = await MongoHelper.updateNote(id, updatedNote);
@@ -32,10 +46,9 @@ class NotesCubit extends Cubit<NotesState> {
         if (index != -1) {
           notes[index] = updatedNote;
         }
-          await fetchAllNotes();
-        
+        await fetchAllNotes();
+
         emit(NotesUpdateSuccess(notes));
-      
       } else {
         emit(NotesUpdateFailure('No changes were made'));
       }
@@ -44,22 +57,22 @@ class NotesCubit extends Cubit<NotesState> {
     }
   }
 
- Future<void> deleteNote(dynamic id) async {
-  emit(NotesLoading());
-  try {
-    final success = await MongoHelper.deleteNote(id);
+  Future<void> deleteNote(dynamic id) async {
+    emit(NotesLoading());
+    try {
+      final success = await MongoHelper.deleteNote(id);
 
-    if (success) {
-      notes.removeWhere((note) => note.id == id);
-      // إعادة تحميل البيانات بعد الحذف
-      await fetchAllNotes();  
-      emit(NotesDeletedSucess(List.from(notes)));
-    } else {
-      emit(NotesDeleteFailure('Note not found'));
+      if (success) {
+        notes.removeWhere((note) => note.id == id);
+        await fetchAllNotes();
+        
+      } else {
+        emit(NotesDeleteFailure('Note not found'));
+         await fetchAllNotes(); 
+      }
+    } catch (e) {
+      emit(NotesDeleteFailure('Delete error: ${e.toString()}'));
+       await fetchAllNotes(); 
     }
-  } catch (e) {
-    emit(NotesDeleteFailure('Delete error: ${e.toString()}'));
   }
-}
-
 }

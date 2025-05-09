@@ -27,8 +27,6 @@ class NotesView extends StatelessWidget {
         ),
         body: BlocBuilder<NotesCubit, NotesState>(
           builder: (context, state) {
-            final cubit = context.read<NotesCubit>();
-
             if (state is NotesLoading) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -37,13 +35,15 @@ class NotesView extends StatelessWidget {
               return Center(child: Text(state.error));
             }
 
-            if (state is NotesSuccess || state is NotesInitial) {
+            // إذا كانت الحالة هي NotesSuccess أو حالة تحديث أو حذف، سيتم عرض الملاحظات
+            if (state is NotesSuccess || state is NotesUpdateSuccess || state is NotesDeletedSucess) {
+              final notes = (state as NotesSuccess).notes; // تأكد من الوصول للملاحظات بشكل صحيح
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ListView.builder(
-                  itemCount: cubit.notes.length,
+                  itemCount: notes.length,
                   itemBuilder: (context, index) {
-                    final note = cubit.notes[index];
+                    final note = notes[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: NoteItem(note: note),

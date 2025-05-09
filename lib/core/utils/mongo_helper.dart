@@ -36,7 +36,8 @@ static Future<String> addNote(NoteModel note) async {
       'color': note.color,
       'date': note.date,
     });
-        final allNotes = await notesCollection.find().toList();
+    
+      final allNotes = await notesCollection.find().toList();
      print("📋 All Notes: $allNotes");
     print("✅ Inserted ID: ${result.id}");
     return result.id.toString();
@@ -70,7 +71,7 @@ static Future<bool> updateNote(dynamic id, NoteModel note) async {
  return true;
   } catch (e) {
     print('Error updating note: $e');
-    return false; // إذا حدث خطأ
+    return false; 
   }
 }
 
@@ -78,7 +79,7 @@ static Future<bool> updateNote(dynamic id, NoteModel note) async {
  
 static Future<bool> deleteNote(dynamic id) async {
   try {
-    if (id.isEmpty) throw Exception('Invalid ID: Empty ID');
+  
 
   
     if (!notesCollection.db.isConnected) {

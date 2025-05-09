@@ -13,10 +13,27 @@ class NoteModel {
     id = json['_id'];
     title = json['title'];
     subtitle = json['subtitle'];
-    color = int.tryParse(json['color']?.toString() ?? '') ?? 0xFFFFFFFF;
+    color = _parseColor(json['color']);
     date = json['date'];
     iV = json['__v'];
   }
+  int _parseColor(dynamic colorValue) {
+  if (colorValue == null) return 0xFFFFFFFF;
+
+  if (colorValue is int) {
+    return colorValue;
+  }
+
+  final colorString = colorValue.toString();
+
+  if (colorString.startsWith('Color(')) {
+    final hexString = colorString.replaceAll('Color(', '').replaceAll(')', '');
+    return int.tryParse(hexString) ?? 0xFFFFFFFF;
+  }
+
+  return int.tryParse(colorString) ?? 0xFFFFFFFF;
+}
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

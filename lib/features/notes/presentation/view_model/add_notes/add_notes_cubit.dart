@@ -4,21 +4,29 @@ import 'package:intl/intl.dart';
 import 'package:notes_app/core/utils/mongo_helper.dart';
 import 'package:notes_app/features/notes/data/models/note_model.dart';
 import 'package:notes_app/features/notes/presentation/view_model/add_notes/add_notes_state.dart';
+import 'package:notes_app/features/notes/presentation/view_model/notes/notes_cubit.dart';
 
 class AddNotesCubit extends Cubit<AddNotesState> {
-  AddNotesCubit() : super(AddNotesInitial());
+  final NotesCubit notesCubit;
 
-Future<void> addNote(NoteModel note) async {
-  emit(AddNotesLoading());
-  try {
-    await MongoHelper.init();
+  AddNotesCubit(this.notesCubit) : super(AddNotesInitial());
 
-    final noteId = await MongoHelper.addNote(note);
-    emit(AddNotesSuccess(noteId: noteId));
-  } catch (e) {
-    emit(AddNotesFailure('Failed to add note: ${e.toString()}'));
+  Future<void> addNote(NoteModel note) async {
+    emit(AddNotesLoading());
+    try {
+      await MongoHelper.init();
+
+      final noteId = await MongoHelper.addNote(note);
+      note.id = noteId;
+
+  
+      notesCubit.addNewNote(note);  
+
+      emit(AddNotesSuccess(noteId: noteId));
+    } catch (e) {
+      emit(AddNotesFailure('Failed to add note: ${e.toString()}'));
+    }
   }
-}
 
   void saveNoteToMongoDB({
     required String title,
@@ -30,10 +38,8 @@ Future<void> addNote(NoteModel note) async {
       final note = NoteModel(
         title: title,
         subtitle: subtitle,
-        // ignore: deprecated_member_use
         color: color.value,
-        date: DateFormat.yMd().format(DateTime.now()), 
-
+        date: DateFormat.yMd().format(DateTime.now()),
       );
       await addNote(note);
     } catch (e) {

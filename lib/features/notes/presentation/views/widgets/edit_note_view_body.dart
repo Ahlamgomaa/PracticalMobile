@@ -24,7 +24,7 @@ class _EditNoteViewBodyState extends State<EditNoteViewBody> {
     super.initState();
     _titleController = TextEditingController(text: widget.note.title);
     _subtitleController = TextEditingController(text: widget.note.subtitle);
-    selectedColor = Color(widget.note.color?? Colors.blue.value); // Default color if null
+    selectedColor = Color(widget.note.color?? Colors.blue.value); 
   }
 
   @override
